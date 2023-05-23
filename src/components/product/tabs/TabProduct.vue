@@ -1,0 +1,180 @@
+<template>
+  <Loading :is-loading="loading"></Loading>
+  <v-card-title>Product Form</v-card-title>
+  <v-card-text>
+    <v-form v-model="valid">
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-text-field
+              v-model="product.name"
+              label="Name"
+              :rules="nameRules"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+              v-model="product.price"
+              :rules="priceRules"
+              label="Price"
+              required
+              type="number"
+              step="0,01"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-text-field
+              v-model="product.description"
+              label="Description"
+              required
+              multi-line
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-select
+              v-model="product.categoryDto"
+              label="Category"
+              :items="categories"
+              required
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          <v-btn
+              color="primary"
+              :disabled="!valid"
+              @click="submitForm"
+          >
+            Send
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-form>
+  </v-card-text>
+</template>
+
+<script>
+import { createProduct, getProductById, updateProduct } from '@/services/product/product'
+import { mapActions } from 'vuex'
+import { getCategories } from '@/services/category/category.service'
+import Loading from '@/components/loading/Loading.vue'
+
+export default {
+  name: 'TabProduct',
+  components: {
+    Loading
+  },
+  data () {
+    return {
+      valid: false,
+      loading: false,
+      product: {
+        name: '',
+        price: null,
+        description: '',
+        categoryDto: [],
+        image: null,
+      },
+      categories: [],
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length >= 10) || 'Name must be more than 10 characters',
+      ],
+      priceRules: [
+        v => !!v || 'Price is required',
+        v => (v && v >= 0) || 'Price must be greater than zero',
+        v => (v && v.toString().replace('.', ',').split(',')[1].length <= 2) ||
+            'The price must have a maximum of 2 decimal places',
+      ],
+    }
+  },
+  methods: {
+    ...mapActions('snackbar', ['showSnackbar']),
+    async loadProduct () {
+      try {
+        this.loading = true
+        const { id } = this.$route.params
+        const response = await getProductById(id)
+        this.product = response.data
+      } catch (error) {
+        await this.showSnackbar({
+          message: 'Error loading product',
+          color: 'error',
+        })
+      } finally {
+        this.loading = false
+      }
+    },
+    async loadCategories () {
+      try {
+        this.loading = true
+        const response = await getCategories()
+        const allCategories = response.data
+        allCategories.forEach(category => {
+          this.categories.push({
+            title: category.name,
+            value: {
+              id: category.id,
+              name: category.name,
+              description: category.description
+            }
+          })
+        })
+      } catch (error) {
+        await this.showSnackbar({
+          message: 'Error loading categories',
+          color: 'error',
+        })
+      } finally {
+        this.loading = false
+      }
+    },
+    async submitForm () {
+      this.loading = true
+
+      const product = { ...this.product }
+
+      try {
+        const { id } = this.$route.params
+        product.id = id
+
+        if (id) {
+          const response = await updateProduct(product)
+          await this.showSnackbar({
+            message: 'Product updated successfully',
+            color: 'success',
+          })
+        } else {
+          const response = await createProduct(product)
+          await this.showSnackbar({
+            message: 'Product registered successfully',
+            color: 'success',
+          })
+        }
+
+      } catch (error) {
+        await this.showSnackbar({
+          message: 'Error registering product',
+          color: 'error',
+        })
+      } finally {
+        this.loading = false
+      }
+
+      this.$router.push('/home')
+    }
+  },
+  async mounted () {
+    if (this.$route.params.id) {
+      await this.loadProduct()
+    }
+    await this.loadCategories()
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
