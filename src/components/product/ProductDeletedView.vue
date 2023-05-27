@@ -35,7 +35,6 @@ export default {
         { title: 'name', key: 'name' },
         { title: 'description', key: 'description' },
         { title: 'price', key: 'price' },
-        { title: 'image', key: 'productImageDto' }
       ],
     }
   },

@@ -1,7 +1,7 @@
 <template>
+  <Loading :is-loading="loading"></Loading>
   <v-row>
     <v-col cols="12">
-
       <v-file-input
           v-model="selectedFiles"
           accept="image/*"
@@ -15,7 +15,7 @@
           <v-img :src="previewUrl.url" contain width="400" height="250"></v-img>
 
           <v-col cols="12" class="d-flex justify-center align-center" style="max-height: 30px !important;">
-            <v-icon @click="deleteImage(index)">mdi-delete</v-icon>
+            <v-icon @click="deleteImage(previewUrl.id)">mdi-delete</v-icon>
             <v-checkbox v-model="previewUrl.principal" @click="setPrincipalImage(index)" class="pt-6" label="Principal">
             </v-checkbox>
           </v-col>
@@ -29,9 +29,13 @@
 import { mapActions } from 'vuex'
 import { createProductImage } from '@/services/product/product'
 import { deleteImage, getAllByProductId, setPrincipalImage } from '@/services/product-image/product-image'
+import Loading from '@/components/loading/Loading.vue'
 
 export default {
   name: 'TabProductImages',
+  components: {
+    Loading
+  },
   data () {
     return {
       tab: 1,
@@ -52,6 +56,7 @@ export default {
         this.previewUrls = response.data
         this.selectedFiles = response.data
       })
+      this.loading = false
     },
     setPrincipalImage (index) {
       this.selectedFiles.forEach((image, i) => {
@@ -65,38 +70,32 @@ export default {
       try {
         this.loading = true
         const productImageId = this.previewUrls[index].id
-
         const productId = this.$route.params.id
-
         setPrincipalImage(productId, productImageId)
         this.showSnackbar({
-          message: 'Imagem principal alterada com sucesso',
+          message: 'Main image changed successfully',
           color: 'success',
         })
       } catch (error) {
         this.showSnackbar({
-          message: 'Erro ao alterar imagem principal',
+          message: 'Error when changing main image',
           color: 'error',
-        }).finally(() => {
-          this.loading = false
         })
       }
-
+      this.loading = false
     },
-    async deleteImage (index) {
+    async deleteImage (id) {
       try {
         this.loading = true
-        const productImageId = this.previewUrls[index].id
-        await deleteImage(productImageId)
+        await deleteImage(id)
         await this.showSnackbar({
-          message: 'Imagem deletada com sucesso',
+          message: 'Successfully deleted image',
           color: 'success',
         })
-        this.selectedFiles.splice(index, 1)
-        this.previewUrls.splice(index, 1)
+        this.getAllByProductId()
       } catch (error) {
         await this.showSnackbar({
-          message: 'Erro ao deletar imagem',
+          message: 'Error deleting image',
           color: 'error',
         }).finally(() => {
           this.loading = false
@@ -117,6 +116,7 @@ export default {
       }
 
       try {
+        this.loading = true
         const { id } = this.$route.params
 
         const response = await createProductImage(id, formData)
@@ -131,11 +131,10 @@ export default {
         })
       } finally {
         this.loading = false
+        this.getAllByProductId()
       }
     },
     async previewImages () {
-      // Reset the preview URLs
-      // this.previewUrls = []
 
       // Check if the number of selected files exceeds the maximum
       if (this.selectedFiles.length > this.maxFiles) {
@@ -157,7 +156,7 @@ export default {
         reader.onload = () => {
           this.previewUrls.push(
               {
-                url: reader.result,
+                // url: reader.result,
                 nome: file.name,
                 principal: false
               }
