@@ -67,7 +67,7 @@
           </v-window-item>
 
           <v-window-item value="two">
-            Add products deleteds
+            <ProductDeletedView/>
           </v-window-item>
 
         </v-window>
@@ -80,11 +80,13 @@
 import { getProducts, deleteProduct } from '@/services/product/product'
 import Loading from '@/components/loading/Loading.vue'
 import { mapActions } from 'vuex'
+import ProductDeletedView from '@/components/product/ProductDeletedView.vue'
 
 export default {
   name: 'ProductView',
   components: {
-    Loading
+    Loading,
+    ProductDeletedView
   },
   methods: {
     ...mapActions('snackbar', ['showSnackbar']),

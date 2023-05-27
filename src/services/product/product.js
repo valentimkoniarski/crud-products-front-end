@@ -5,6 +5,10 @@ export function getProducts () {
   return axios.get(API_URL + 'products')
 }
 
+export function getProductsDeleted () {
+  return axios.get(API_URL + 'products/products-deleted')
+}
+
 export function getProductById (id) {
   return axios.get(API_URL + 'products/' + id)
 }

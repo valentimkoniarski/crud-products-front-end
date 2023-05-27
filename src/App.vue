@@ -18,7 +18,6 @@
 <script>
 
 import Header from '@/components/header/Header.vue'
-import Login from '@/components/login/Login.vue'
 
 import { mapGetters } from 'vuex'
 
@@ -28,7 +27,6 @@ export default {
   name: 'App',
   components: {
     Snackbar,
-    Login,
     Header
   },
   computed: {

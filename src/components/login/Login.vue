@@ -22,14 +22,13 @@
                 required
             ></v-text-field>
             <v-card-actions>
-              <v-spacer></v-spacer>
-              <router-link to="/home">
-                <v-btn
-                    color="primary"
-                    :disabled="!valid"
-                    @click="logar"
-                >Login
 
+              <v-btn class="text-center" color="primary" :disabled="!valid" @click="logar">
+                Login
+              </v-btn>
+              <router-link to="register">
+                <v-btn color="primary">
+                  Register
                 </v-btn>
               </router-link>
             </v-card-actions>
@@ -76,13 +75,17 @@ export default {
     logar () {
       this.loading = true
       login(this.login)
-          .then(() => {
-            this.$router.push({ name: 'home' })
+          .then((response) => {
+            if (response.data) {
+              const userInfo = 'Bearer ' + response.data.token
+              localStorage.setItem('user', JSON.stringify(userInfo))
+              this.$router.push('/home')
+            }
           })
-          .catch(() => {
+          .catch((error) => {
             this.showSnackbar({
-              mensagem: 'Erro ao fazer login',
-              cor: 'error'
+              message: error?.response?.data || error.message,
+              color: 'error'
             })
           })
           .finally(() => {
