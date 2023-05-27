@@ -18,7 +18,6 @@
               label="Price"
               required
               type="number"
-              step="0,01"
           />
         </v-col>
       </v-row>
@@ -85,9 +84,8 @@ export default {
       priceRules: [
         v => !!v || 'Price is required',
         v => (v && v >= 0) || 'Price must be greater than zero',
-        v => (v && v.toString().replace('.', ',').split(',')[1].length <= 2) ||
-            'The price must have a maximum of 2 decimal places',
-      ],
+        v => (v && v.toString().split('.')[1].length <= 2) || 'Price must have two decimal places',
+      ]
     }
   },
   methods: {

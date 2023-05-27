@@ -5,7 +5,7 @@
 
       <v-card-title>
         <v-row>
-          <v-col cols="6" sm="6" md="3">
+          <v-col cols="8" sm="8" md="6">
             <router-link to="/new">
               <v-btn text color="primary">
                 <v-icon>mdi-plus</v-icon>
@@ -14,7 +14,7 @@
             </router-link>
           </v-col>
 
-          <v-col cols="6" sm="6" md="3">
+          <v-col cols="8" sm="8" md="6">
             <router-link to="/category">
               <v-btn text color="blue">
                 <v-icon>mdi-wrench</v-icon>

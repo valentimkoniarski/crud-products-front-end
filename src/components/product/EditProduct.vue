@@ -64,13 +64,8 @@ export default {
         {
           text: 'Produtos',
           disabled: false,
-          href: '/home',
-        },
-        {
-          text: 'editar produto',
-          disabled: true,
-          href: '',
-        },
+          href: `${this.$route.params.id}`,
+        }
       ],
     }
   }

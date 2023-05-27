@@ -30,12 +30,12 @@ export default {
           href: '/home',
         },
         {
-          text: 'Produtos',
+          text: 'Product',
           disabled: false,
-          href: '/products',
+          href: '/new',
         },
         {
-          text: 'Novo Produto',
+          text: 'New Product',
           disabled: false,
           href: '',
         },
