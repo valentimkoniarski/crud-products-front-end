@@ -9,7 +9,6 @@
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --fix --ext .js,.vue src",
     "serve": "vue-cli-service serve",
-    "build:prod": "vue-cli-service build",
     "start": "npm run serve"
   },
   "dependencies": {
