@@ -27,9 +27,6 @@ export const routes = createRouter({
 routes.beforeEach((to, from, next) => {
     const loggedIn = localStorage.getItem('user')
 
-    console.log('loggedIn')
-    console.log(loggedIn)
-
     if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
       next('/login')
     } else {
