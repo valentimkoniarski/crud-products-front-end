@@ -8,7 +8,9 @@
     "preview": "vite preview",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --fix --ext .js,.vue src",
-    "start": "vite"
+    "build:prod": "vue-cli-service build --mode production",
+    "build:dev": "vue-cli-service build --mode development",
+    "start:prod": "vue-cli-service serve --mode production"
   },
   "dependencies": {
     "axios": "^1.4.0",
