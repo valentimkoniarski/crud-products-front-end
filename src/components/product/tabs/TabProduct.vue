@@ -5,47 +5,26 @@
     <v-form v-model="valid">
       <v-row>
         <v-col cols="12" md="6">
-          <v-text-field
-              v-model="product.name"
-              label="Name"
-              :rules="nameRules"
-          />
+          <v-text-field v-model="product.name" label="Name" :rules="nameRules" required/>
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field
-              v-model="product.price"
-              :rules="priceRules"
-              label="Price"
-              required
-              type="number"
-          />
+          <v-text-field v-model="product.price" :rules="priceRules" label="Price" required type="number"
+                        v-on:blur="formatPrice"/>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="6">
-          <v-text-field
-              v-model="product.description"
-              label="Description"
-              required
-              multi-line
-          />
+          <v-text-field v-model="product.description" :rules="descriptionRules" label="Description" required
+                        multi-line/>
         </v-col>
         <v-col cols="12" md="6">
-          <v-select
-              v-model="product.categoryDto"
-              label="Category"
-              :items="categories"
-              required
-          />
+          <v-select v-model="product.categoryDto" label="Category" :rules="categoriesRules" :items="categories"
+                    required/>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12">
-          <v-btn
-              color="primary"
-              :disabled="!valid"
-              @click="submitForm"
-          >
+          <v-btn color="primary" :disabled="!valid" @click="submitForm">
             Send
           </v-btn>
         </v-col>
@@ -79,17 +58,33 @@ export default {
       categories: [],
       nameRules: [
         v => !!v || 'Name is required',
-        v => (v && v.length >= 10) || 'Name must be more than 10 characters',
+        v => (v && v.length >= 5) || 'Name must be more than 5 characters',
+        v => (v && v.length <= 15) || 'Name must be less than 15 characters'
       ],
       priceRules: [
         v => !!v || 'Price is required',
-        v => (v && v >= 0) || 'Price must be greater than zero',
-        v => (v && v.toString().split('.')[1].length <= 2) || 'Price must have two decimal places',
+        v => /^[0-9]+(\.[0-9]{1,2})?$/.test(v) || 'Price must be a number',
+        v => (v && v >= 0) || 'Price must be greater than zero'
+      ],
+      descriptionRules: [
+        v => !!v || 'Description is required',
+        v => (v && v.length >= 5) || 'Description must be more than 5 characters',
+        v => (v && v.length <= 80) || 'Description must be less than 80 characters'
+      ],
+      categoriesRules: [
+        v => !!v || 'Category is required',
       ]
     }
   },
   methods: {
     ...mapActions('snackbar', ['showSnackbar']),
+    formatPrice () {
+      const price = this.product.price
+      if (price) {
+        const priceFormatted = parseFloat(price).toFixed(2)
+        this.product.price = priceFormatted
+      }
+    },
     async loadProduct () {
       try {
         this.loading = true
@@ -135,17 +130,17 @@ export default {
       const product = { ...this.product }
 
       try {
-        const { id } = this.$route.params
+        const { id } = this.$route.params || null
         product.id = id
 
         if (id) {
-          const response = await updateProduct(product)
+          await updateProduct(product)
           await this.showSnackbar({
             message: 'Product updated successfully',
             color: 'success',
           })
         } else {
-          const response = await createProduct(product)
+          await createProduct(product)
           await this.showSnackbar({
             message: 'Product registered successfully',
             color: 'success',
@@ -167,6 +162,7 @@ export default {
   async mounted () {
     if (this.$route.params.id) {
       await this.loadProduct()
+      this.formatPrice()
     }
     await this.loadCategories()
   }
