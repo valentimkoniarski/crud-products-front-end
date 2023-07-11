@@ -120,7 +120,6 @@ export default {
         this.isLoading = true
         const products = await getProducts()
         this.products = products.data.content
-        console.log(products.data)
       } catch (e) {
         await this.showSnackbar({
           message: 'Error loading products!',

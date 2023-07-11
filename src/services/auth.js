@@ -16,7 +16,6 @@ export function register (user) {
       password: user.password
     })
     .then(response => {
-      console.log(response)
       return response.data
     }).catch(error => {
       console.log(error)

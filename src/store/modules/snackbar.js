@@ -29,9 +29,6 @@ const mutations = {
 const actions = {
   showSnackbar ({ commit }, payload) {
     commit('showSnackbar', payload)
-
-    console.log('showSnackbar', payload)
-
     setTimeout(() => {
       commit('hideSnackbar')
     }, payload.timeout || 3000)
