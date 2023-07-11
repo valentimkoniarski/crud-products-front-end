@@ -11,7 +11,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 export const routes = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/login', name: 'Login', component: Login },
+    { path: '/login', name: 'login', component: Login },
     { path: '/register', name: 'register', component: Register },
     { path: '/confirmation-email', name: 'confirmation-email', component: ConfirmationEmail },
     { path: '/home', name: 'home', component: ProductView, meta: { requiresAuth: true } },

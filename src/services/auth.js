@@ -28,11 +28,16 @@ export function logout () {
   localStorage.removeItem('user')
 }
 
+/*
+// TODO: check if this is needed
 export function getCurrentUser () {
+
   const user = JSON.parse(localStorage.getItem('user'))
   if (user) {
     const decodedToken = jwt_decode(user)
+    console.log('decodedToken')
     console.log(decodedToken)
+    console.log('decodedToken')
     return {
       id: decodedToken.id,
       email: decodedToken.email
@@ -41,3 +46,4 @@ export function getCurrentUser () {
     return null
   }
 }
+*/
