@@ -1,4 +1,5 @@
 <template>
+  <Loading :is-loading="loading"></Loading>
   <v-container style="margin-top: 100px !important;">
     <v-breadcrumbs :items="itemsLinks" large></v-breadcrumbs>
     <v-row>
@@ -58,11 +59,14 @@
 
 import { getCategories, deleteCategory } from '@/services/category/category.service'
 import { mapActions } from 'vuex'
+import Loading from '@/components/loading/Loading.vue'
 
 export default {
   name: 'Category',
+  components: { Loading },
   data () {
     return {
+      loading: false,
       categories: [],
       dialog: false,
       dialogItem: null,
@@ -86,20 +90,26 @@ export default {
   },
   methods: {
     ...mapActions('snackbar', ['showSnackbar']),
-    loadCategories () {
-      getCategories().then((response) => {
+    async loadCategories () {
+      this.loading = true
+      await getCategories().then((response) => {
         this.categories = response.data
-        console.log(this.categories)
+      }).catch((error) => {
+        this.showSnackbar({ message: error.request.response, color: 'error' })
       })
+      this.loading = false
     },
     async deleteItemConfirm () {
       try {
+        this.loading = true
         await deleteCategory(this.dialogItem.id)
         this.categories = this.categories.filter((e) => e.id !== this.dialogItem.id)
         this.dialog = false
         await this.showSnackbar({ message: 'Category deleted successfully', color: 'success' })
       } catch (error) {
         await this.showSnackbar({ message: error.request.response, color: 'error' })
+      } finally {
+        this.loading = false
       }
     },
     deletDialog (item) {

@@ -1,4 +1,5 @@
 <template>
+  <Loading :is-loading="loading"></Loading>
   <v-card-title>Timeline</v-card-title>
   <v-card-text>
     <v-timeline v-for="timeline in productHistory" side="end" align="start">
@@ -17,9 +18,11 @@
 
 <script>
 import { getProductsTimeline } from '@/services/product/product'
+import Loading from '@/components/loading/Loading.vue'
 
 export default {
   name: 'TabTimeline',
+  components: { Loading },
   data () {
     return {
       loading: false,
@@ -29,7 +32,7 @@ export default {
   methods: {
     async loadProductsHistory () {
       try {
-        this.isLoading = true
+        this.loading = true
 
         const productId = this.$route.params.id
         const timeline = await getProductsTimeline(productId)
@@ -42,7 +45,7 @@ export default {
           color: 'error'
         })
       } finally {
-        this.isLoading = false
+        this.loading = false
       }
     },
     formatDate (date) {
