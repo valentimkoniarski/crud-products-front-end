@@ -6,7 +6,6 @@
     <v-card>
       <v-tabs v-model="tab" bg-color="primary">
         <v-tab value="one">Product</v-tab>
-        <v-tab value="two">Product Images</v-tab>
         <v-tab value="three">Timeline</v-tab>
       </v-tabs>
 
@@ -17,11 +16,6 @@
           <!-- Product Tab -->
           <v-window-item value="one">
             <TabProduct/>
-          </v-window-item>
-
-          <!-- Product Image Tab -->
-          <v-window-item value="two">
-            <TabProductImages/>
           </v-window-item>
 
           <!-- Timeline Tab -->
@@ -39,7 +33,6 @@
 
 import Loading from '@/components/loading/Loading.vue'
 import TabProduct from '@/components/product/tabs/TabProduct.vue'
-import TabProductImages from '@/components/product/tabs/TabProductImages.vue'
 import TabTimeline from '@/components/product/tabs/TabTimeline.vue'
 
 export default {
@@ -47,7 +40,6 @@ export default {
   components: {
     Loading,
     TabProduct,
-    TabProductImages,
     TabTimeline
   },
   data () {

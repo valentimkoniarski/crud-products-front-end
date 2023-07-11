@@ -52,8 +52,7 @@ export default {
         name: '',
         price: null,
         description: '',
-        categoryDto: [],
-        image: null,
+        categoryDto: []
       },
       categories: [],
       nameRules: [

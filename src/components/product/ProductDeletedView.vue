@@ -43,7 +43,7 @@ export default {
       try {
         this.isLoading = true
         const products = await getProductsDeleted()
-        this.products = products.data
+        this.products = products.data.content
       } catch (e) {
         await this.showSnackbar({
           message: 'Error loading products!',

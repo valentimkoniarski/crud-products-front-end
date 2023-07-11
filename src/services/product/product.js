@@ -25,14 +25,6 @@ export function getProductsTimeline (productId) {
   return axios.get(API_URL + `products-history/${productId}`)
 }
 
-export function createProductImage (productId, formData) {
-  return axios.post(API_URL + `products-images/upload/${productId}`, formData)
-}
-
-export function loadProductImage (productImageName) {
-  return (API_URL + `products-images/download/${productImageName}`)
-}
-
 export function createProduct (product) {
   return axios.post(API_URL + 'products', product)
 }

@@ -45,11 +45,6 @@
                 <v-icon small color="red" @click="deletDialog(item.props.title)">mdi-delete</v-icon>
               </template>
 
-              <!-- template for image -->
-              <template v-slot:item.productImageDto="{ item }">
-                <v-img :src="item.props.title?.productImageDto?.[0]?.url" width="200" height="200"></v-img>
-              </template>
-
             </v-data-table>
 
             <v-dialog v-model="dialog" width="400" height="400">
@@ -124,7 +119,8 @@ export default {
       try {
         this.isLoading = true
         const products = await getProducts()
-        this.products = products.data
+        this.products = products.data.content
+        console.log(products.data)
       } catch (e) {
         await this.showSnackbar({
           message: 'Error loading products!',
@@ -144,17 +140,10 @@ export default {
     dialog: false,
     dialogItem: {},
     headers: [
-      // {
-      //   title: 'Dessert (100g serving)',
-      //   align: 'start',
-      //   key: 'name',
-      //   sortable: false,
-      // },
       { title: 'id', key: 'id' },
       { title: 'name', key: 'name' },
       { title: 'description', key: 'description' },
       { title: 'price', key: 'price' },
-      { title: 'image', key: 'productImageDto' },
       // actions
       {
         title: 'Actions',
@@ -168,6 +157,3 @@ export default {
   }),
 }
 </script>
-
-<style scoped>
-</style>
