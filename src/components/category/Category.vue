@@ -1,6 +1,6 @@
 <template>
   <Loading :is-loading="loading"></Loading>
-  <v-container style="margin-top: 100px !important;">
+  <v-container>
     <v-breadcrumbs :items="itemsLinks" large></v-breadcrumbs>
     <v-row>
       <v-col cols="12">

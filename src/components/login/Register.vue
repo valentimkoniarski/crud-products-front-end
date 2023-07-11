@@ -61,16 +61,16 @@
 
               <v-row>
                 <v-col cols="12" sm="6" md="6">
+                  <v-btn color="primary" :disabled="!valid" @click="register">
+                    Register
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="6" md="6">
                   <router-link to="/login">
                     <v-btn color="primary">
                       Already have an account?
                     </v-btn>
                   </router-link>
-                </v-col>
-                <v-col cols="12" sm="6" md="6">
-                  <v-btn color="primary" :disabled="!valid" @click="register">
-                    Register
-                  </v-btn>
                 </v-col>
               </v-row>
             </v-card-actions>
