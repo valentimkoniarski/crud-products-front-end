@@ -18,8 +18,7 @@
                         multi-line/>
         </v-col>
         <v-col cols="12" md="6">
-          <v-select v-model="product.categoryDto" label="Category" :rules="categoriesRules" :items="categories"
-                    required/>
+          <v-select v-model="product.categoryDto" label="Category" :items="categories"/>
         </v-col>
       </v-row>
       <v-row>
@@ -52,7 +51,7 @@ export default {
         name: '',
         price: null,
         description: '',
-        categoryDto: []
+        categoryDto: null
       },
       categories: [],
       nameRules: [
@@ -69,9 +68,6 @@ export default {
         v => !!v || 'Description is required',
         v => (v && v.length >= 5) || 'Description must be more than 5 characters',
         v => (v && v.length <= 80) || 'Description must be less than 80 characters'
-      ],
-      categoriesRules: [
-        v => !!v || 'Category is required',
       ]
     }
   },
